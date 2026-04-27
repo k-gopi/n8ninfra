@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n
+  namespace: n8n-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n8n
+  template:
+    metadata:
+      labels:
+        app: n8n
+    spec:
+      containers:
+        - name: n8n
+          image: n8nio/n8n:latest
+          ports:
+            - containerPort: 5678
+          env:
+            - name: DB_TYPE
+              value: postgresdb
+
+            - name: DB_POSTGRESDB_HOST
+              value: postgres
+
+            - name: DB_POSTGRESDB_PORT
+              value: "5432"
+
+            - name: DB_POSTGRESDB_DATABASE
+              value: n8n
+
+            - name: DB_POSTGRESDB_USER
+              value: n8n
+
+            - name: DB_POSTGRESDB_PASSWORD
+              value: n8npass
+
+            - name: N8N_BASIC_AUTH_ACTIVE
+              value: "true"
+
+            - name: N8N_BASIC_AUTH_USER
+              value: admin
+
+            - name: N8N_BASIC_AUTH_PASSWORD
+              value: admin123
+
+            # ✅ FIX: HTTP dev environment support
+            - name: N8N_SECURE_COOKIE
+              value: "false"
