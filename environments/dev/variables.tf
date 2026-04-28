@@ -98,3 +98,10 @@ variable "dns_prefix" {
 variable "authorized_ip_ranges" {
   type = list(string)
 }
+variable "keyvault_name" {
+  type = string
+}
+variable "keyvault_public_access" {
+  type    = bool
+  default = true   # dev only
+}

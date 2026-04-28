@@ -63,8 +63,30 @@ module "aks" {
   system_node_pool = var.system_node_pool
   user_node_pools  = var.user_node_pools
 
-  # ❌ removed app gateway (for now)
+  #  removed app gateway (for now)
 application_gateway_id = ""
 authorized_ip_ranges = var.authorized_ip_ranges
   tags = module.tags.tags
+}
+data "azurerm_client_config" "current" {}
+
+module "keyvault" {
+  source = "../../modules/keyvault"
+
+  name                = var.keyvault_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+
+  tags = module.tags.tags
+
+  # 🔐 Better practice: control via variable (not hardcoded)
+  public_network_access_enabled = var.keyvault_public_access
+}
+
+resource "azurerm_role_assignment" "aks_kv_access" {
+  principal_id         = module.aks.kubelet_identity_object_id
+  role_definition_name = "Key Vault Secrets User"
+  scope                = module.keyvault.id
 }

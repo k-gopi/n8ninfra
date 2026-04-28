@@ -14,6 +14,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   identity {
     type = "SystemAssigned"
   }
+  key_vault_secrets_provider {
+  secret_rotation_enabled = true
+}
 
   # -------------------------
   # SYSTEM NODE POOL
@@ -99,3 +102,5 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
 
   tags = var.tags
 }
+
+

@@ -77,3 +77,4 @@ user_node_pools = {
     os_sku          = "Ubuntu"
   }
 }
+keyvault_name = "n8n-dev-eus2-kv"
